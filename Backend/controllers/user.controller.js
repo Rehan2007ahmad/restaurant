@@ -102,37 +102,42 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.getUserById = async (req,res) => {
-  const {id} = req.params
+exports.getUserById = async (req, res) => {
+  const { id } = req.params;
 
   try {
-    if(!id){
-      return res.status(400).json({message:'id is required'})
+    if (!id) {
+      return res.status(400).json({ message: "id is required" });
     }
 
-    const getUser = await User.findById(id).select('-password')
+    const getUser = await User.findById(id).select("-password");
 
-    if(!getUser){
-      return res.status(404).json({message:'User not found'})
+    if (!getUser) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(getUser)
+    res.status(200).json(getUser);
   } catch (error) {
-    return res.status(500).json({message:'internal server error'})
+    return res.status(500).json({ message: "internal server error" });
   }
-}
+};
 
-exports.updateUser = async (req,res) => {
-  const {id} = req.params
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
   try {
-    if(!id){
-      return res.status(400).json({message: 'Id is required'})
+    if (!id) {
+      return res.status(400).json({ message: "Id is required" });
     }
 
-    const update = await User.findByIdAndUpdate(id, req.body, {new:true, select: '-password'})
+    const update = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+      select: "-password",
+    });
 
-    res.status(200).json({message:'User Updated Successfully', user:update})
+    res
+      .status(200)
+      .json({ message: "User Updated Successfully", user: update });
   } catch (error) {
-    return res.status(500).json({message:'Internal server error'})
+    return res.status(500).json({ message: "Internal server error" });
   }
-}
+};

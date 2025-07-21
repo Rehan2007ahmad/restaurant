@@ -1,9 +1,17 @@
-const express = require('express')
-const { createAddOns, getAllAddOnsByRestaurantId } = require('../controllers/addOnsExtras.controller')
-const router = express.Router()
+const express = require("express");
+const {
+  createAddOns,
+  getAllAddOnsByRestaurantId,
+  deleteAddOns,
+  getAddOnsById,
+  updateAddOns,
+} = require("../controllers/addOnsExtras.controller");
+const router = express.Router();
 
-router.post('/', createAddOns)
-router.get('/:id', getAllAddOnsByRestaurantId)
+router.post("/", createAddOns);
+router.delete("/:id", deleteAddOns);
+router.get("/getbyrestaurantid/:id", getAllAddOnsByRestaurantId);
+router.get("/getbyid/:id", getAddOnsById);
+router.put("/:id", updateAddOns);
 
-
-module.exports = router
+module.exports = router;

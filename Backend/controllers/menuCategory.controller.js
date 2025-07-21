@@ -8,11 +8,11 @@ exports.createMenuCategory = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const findRestaurant = await restaurantModel.findById(restaurantId)
-    if(!findRestaurant){
-        return res.status(404).json({message:'Restaurant not found'})
+    const findRestaurant = await restaurantModel.findById(restaurantId);
+    if (!findRestaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
     }
-    const category = await MenuCategory.findOne({ categoryName,restaurantId });
+    const category = await MenuCategory.findOne({ categoryName, restaurantId });
 
     if (category) {
       return res.status(400).json({ message: "Category already exists" });
@@ -29,7 +29,7 @@ exports.createMenuCategory = async (req, res) => {
       newCategory,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" , error});
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -45,7 +45,7 @@ exports.getAllMenuCategoryByRestaurantId = async (req, res) => {
     if (!categories || categories.length === 0) {
       return res.status(404).json({ message: "No categories found" });
     }
-    return res.status(200).json( categories );
+    return res.status(200).json(categories);
   } catch (error) {
     return res
       .status(500)
@@ -93,5 +93,26 @@ exports.deleteMenuCategory = async (req, res) => {
     res.status(200).json({ message: "Deleted Successfully" });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getMenuCategoryById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (!id) {
+      return res.status(400).json({ message: "Id is required" });
+    }
+
+    const getMenuCategory = await MenuCategory.findById(id);
+
+    if (!getMenuCategory) {
+      return res.status(404).json({ message: "Menu Category not found" });
+    }
+
+    res.status(200).json(getMenuCategory);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
