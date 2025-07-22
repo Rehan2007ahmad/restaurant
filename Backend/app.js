@@ -13,6 +13,7 @@ app.use('/api/restaurant', require('./routes/restaurant.routes'))
 app.use('/api/menucategory', require('./routes/menuCategory.routes'))
 app.use('/api/addons', require('./routes/addOnsExtras.routes'))
 app.use('/api/menu', require('./routes/menu.routes'))
+app.use('/api/table', require('./routes/table.routes'))
 
 
 const PORT = process.env.PORT ;
