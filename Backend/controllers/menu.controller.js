@@ -1,10 +1,10 @@
 const Menu = require("../models/menu.models");
 
 exports.createMenu = async (req, res) => {
-  const { name, image, restaurantId } = req.body;
+  const { name, image, restaurantId, price } = req.body;
 
   try {
-    if (!name || !image || !restaurantId) {
+    if (!name || !image || !restaurantId, !price) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -18,6 +18,7 @@ exports.createMenu = async (req, res) => {
       name,
       image,
       restaurantId,
+      price
     });
 
     res.status(200).json({ message: "new menu created successfully", newMenu });

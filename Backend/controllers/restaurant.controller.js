@@ -1,4 +1,10 @@
+const mongoose = require("mongoose")
 const Restaurant = require("../models/restaurant.model");
+const AddOns = require('../models/addOnsExtras.models')
+const Menu = require('../models/menu.models')
+const MenuCategory = require('../models/menuCategory.models')
+const Order = require('../models/order.models')
+const Table = require('../models/table.models')
 
 exports.createRestaurant = async (req, res) => {
   const { name, address, logo, owner, phone } = req.body;
@@ -51,23 +57,28 @@ exports.getRestaurantById = async (req, res) => {
 };
 
 exports.deletRestaurant = async (req, res) => {
-  const { id } = req.params;
+ try {
+    const { id } = req.params;
 
-  try {
-    if (!id) {
-      return res.status(400).json({ message: "Id is Required" });
+    const restaurant = await Restaurant.findById(id);
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
     }
 
-    const findRestaurant = await Restaurant.findOne({ _id: id });
-    if (!findRestaurant) {
-      res.status(400).json({ message: "Restaurant Not found" });
-    }
+    await Promise.all([
+      AddOns.deleteMany({ restaurantId: id }),
+      Menu.deleteMany({ restaurantId: id }),
+      MenuCategory.deleteMany({ restaurantId: id }),
+      Order.deleteMany({ restaurantId: id }),
+      Table.deleteMany({ restaurantId: id }),
+    ]);
 
-    await Restaurant.findByIdAndDelete(id);
+    await Restaurant.findByIdAndDelete(id)
 
-    res.status(200).json({ message: "Restaurant deletd Successfully" });
+    res.status(200).json({ message: "Restaurant and all related data deleted" });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server error" });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
 
